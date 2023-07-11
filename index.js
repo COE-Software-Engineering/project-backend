@@ -2,8 +2,8 @@ import express from 'express';
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from 'dotenv';
-import studentRoutes from './routes/studentRoutes';
-import lecturerRoutes from './routes/lecturerRoutes';
+import studentRoutes from './routes/studentRoutes.js';
+import lecturerRoutes from './routes/lecturerRoutes.js';
 
 const app = express();
 
@@ -19,3 +19,6 @@ app.use("/lecturers", lecturerRoutes);
 app.get("/", (req, res) => {
   res.status(200).send("WELCOME TO THE VIRTUAL CLASSROOM BACKEND!");
 });
+
+// listening for requests
+app.listen(3001);
