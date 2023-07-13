@@ -9,4 +9,7 @@ const pool = new Pool({
 })
 
 
-export default pool;
+// export default pool;
+export const query = (text, params, callback) => {
+    return pool.query(text, params, callback);
+}
