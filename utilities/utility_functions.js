@@ -28,3 +28,13 @@ export function generateRandomString(n){
 export async function hashText(text, saltRounds){
     return await bcrypt.hash(text, saltRounds)
 }
+
+/**
+ * function compare string against hash
+ * @param text the text to verify
+ * @param encryptedText the hash to compare the text against
+ */
+
+export async function compareHash(text, hashedText){
+    return await bcrypt.compare(text, hashedText);
+}
