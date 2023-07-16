@@ -1,9 +1,10 @@
+import { query } from "express";
 import {
   FORM_CONSTANTS,
   ERROR_CODES,
   CONFIG_CONSTANTS,
 } from "../config/constants.js";
-import { getStudent, activateAccount } from "../models/studentModel.js";
+import { getStudentWithIndex, activateAccount, getStudentWithEmail } from "../models/studentModel.js";
 import {
   generateRandomString,
   hashText,
@@ -28,7 +29,7 @@ export const signup = async (req, res) => {
 
     if (errorCodes.length == 0) {
       // let res = await doesIndexExist(req.body.index_num);
-      let query_res = await getStudent(req.body.index_num);
+      let query_res = await getStudentWithIndex(req.body.index_num);
       if (query_res.rows.length) {
         if (query_res.rows[0].active === "0") {
           let tempPass = generateRandomString(
@@ -65,7 +66,7 @@ export const signup = async (req, res) => {
 export const signin = async (req, res) => {
   let errorCodes = [];
   try {
-    let queryRes = await getStudent(req.body.index_num);
+    let queryRes = await getStudentWithEmail(req.body.email);
     if (!(queryRes.rows.length && (await compareHash(req.body.password, queryRes.rows[0].password))))
       errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
   } catch (error) {

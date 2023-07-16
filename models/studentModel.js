@@ -20,8 +20,14 @@ export async function activateAccount(index_num, email, password ) {
   return res.rowCount;
 }
 
-export async function getStudent(index_num) {
+export async function getStudentWithIndex(index_num) {
   let query = "SELECT * FROM Student WHERE index_number = $1";
   let params = [index_num];
+  return await db.query(query, params);
+}
+
+export async function getStudentWithEmail(email){
+  let query = "SELECT * FROM Student WHERE email = $1";
+  let params = [email];
   return await db.query(query, params);
 }
