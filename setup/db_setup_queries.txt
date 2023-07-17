@@ -1,0 +1,76 @@
+--------------------------------------------------------------------------------------------------------------
+-- Database Creation START
+--------------------------------------------------------------------------------------------------------------
+DROP DATABASE IF EXISTS classroom_assistant;
+CREATE DATABASE classroom_assistant;
+
+\c classroom_assistant
+--------------------------------------------------------------------------------------------------------------
+-- Database Creation END
+--------------------------------------------------------------------------------------------------------------
+
+
+
+
+--------------------------------------------------------------------------------------------------------------
+-- Student Table Creation START
+--------------------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS Student;
+CREATE TABLE Student(
+	Reference_Number VARCHAR(15) PRIMARY KEY,
+	Index_Number VARCHAR(15),
+	Surname VARCHAR(50),
+	Othername VARCHAR(50)
+);
+
+-- copying data from classlist.csv into table
+\copy Student FROM 'C:\Users\Eli\Documents\KNUST\3rd_year\sem2\Software Engineering\Classroom_Assistant\Assets\classlist.csv' DELIMITER ',' CSV HEADER
+
+
+-- adding password and active columns
+ALTER TABLE Student
+ADD Email VARCHAR,
+ADD Password VARCHAR,
+ADD Active CHAR DEFAULT 0;
+--------------------------------------------------------------------------------------------------------------
+-- Student Table Creation END
+--------------------------------------------------------------------------------------------------------------
+
+
+
+
+--------------------------------------------------------------------------------------------------------------
+-- Lecturer Table Creation START
+--------------------------------------------------------------------------------------------------------------
+CREATE TABLE public.lecturer
+(
+    staff_id integer,
+    first_name text NOT NULL,
+    last_name text NOT NULL,
+    course text,
+    email text,
+    office_number integer,
+    gender text,
+    poster_id integer,
+    password VARCHAR,
+    active CHAR DEFAULT 0,
+    CONSTRAINT staff_id_sequence PRIMARY KEY (staff_id)
+);
+
+ALTER TABLE IF EXISTS public.lecturer
+    OWNER to postgres;
+INSERT INTO public.lecturer(
+	staff_id, first_name, last_name, course, email_address, office_number, gender, poster_id)
+	VALUES 
+('10293347', 'Emmanuel', 'Keelson', 'Operating systems', 'keelson@gmail.com', '109', 'male',4001),
+('10293809', 'Theresa', 'Kumson', 'Software Engineering', 'kumawood@gmail.com', '100', 'female',4201),
+('10200840', 'Esinam', 'Ebbah', 'Database and infomation retrieval', 'ebbah56@gmail.com', '1046', 'male',4031),
+('10433847', 'Peace', 'Donkor', 'Digital systems', 'peacedonkor@gmail.com', '164', 'male',4011),
+('10293988', 'Yussif', 'Domennyo', 'Autronic lab','ydomennyo8@gmail.com', '199', 'male',4701),
+('10290917', 'Patrick', 'Kommey', 'Embedded systems', 'themanhimself@gmail.com', '111', 'male',4909);
+
+--------------------------------------------------------------------------------------------------------------
+-- Lecturer Table Creation END
+--------------------------------------------------------------------------------------------------------------
+
+
