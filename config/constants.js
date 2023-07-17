@@ -3,21 +3,23 @@ export const FORM_CONSTANTS = {
   EMAIL_REGEX: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/,
   PASSWORD_REGEX:
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[/*.~!@#$%^&*()_+?|\\]).{8,50}$/,
-  INDEXNUM_REGEX: /^[0-9]{7}/
+  INDEXNUM_REGEX: /^[0-9]{7}/,
+  STAFFID_REGEX: /^[0-9]{8}/
 };
 
 export const ERROR_CODES = {
-  INVALID_FIRSTNAME: 0,
-  INVALID_LASTNAME: 1,
-  INVALID_FULLNAME: 2,
-  INVALID_EMAIL: 3,
-  INVALID_PASSWORD: 4,
-  PASSWORD_MISMATCH: 5,
-  INVALID_INDEXNUM: 6,
-  INDEXNUM_NOT_FOUND: 7,
-  ACCOUNT_ALREADY_ACTIVE: 8,
-  UNKNOWN_SIGNUP_ERROR: 9,
-  INVALID_SIGNIN_CREDENTIALS: 10
+  INVALID_FIRSTNAME: [0, "Invalid First name"],
+  INVALID_LASTNAME: [1, "Invalid Last ame"],
+  INVALID_FULLNAME: [2, "Invalid full name"],
+  INVALID_EMAIL: [3, "Invalid email address"],
+  INVALID_PASSWORD: [4, "Invalid password"],
+  PASSWORD_MISMATCH: [5, "Password mismatch"],
+  INVALID_INDEXNUM: [6, "Invalid index number"],
+  INDEXNUM_NOT_FOUND: [7, "Index number not found"],
+  ACCOUNT_ALREADY_ACTIVE: [8, "Account already active"],
+  UNKNOWN_SIGNUP_ERROR: [9, "Uknown sign up error"],
+  INVALID_SIGNIN_CREDENTIALS: [10, "Invalid sign in credentials"],
+  INVALID_STAFFID: [11, "Invalid staff id"]
 };
 
 export const CONFIG_CONSTANTS = {
