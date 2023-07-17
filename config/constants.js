@@ -19,7 +19,8 @@ export const ERROR_CODES = {
   ACCOUNT_ALREADY_ACTIVE: [8, "Account already active"],
   UNKNOWN_SIGNUP_ERROR: [9, "Uknown sign up error"],
   INVALID_SIGNIN_CREDENTIALS: [10, "Invalid sign in credentials"],
-  INVALID_STAFFID: [11, "Invalid staff id"]
+  INVALID_STAFFID: [11, "Invalid staff id"],
+  STAFFID_NOT_FOUND: [12, "Staff id not found"]
 };
 
 export const CONFIG_CONSTANTS = {

@@ -15,7 +15,6 @@ import {
 } from "../utilities/utility_functions.js";
 import { sendPasswordOnSignup } from "../utilities/mail.js";
 
-
 // sign up handler
 export const signup = async (req, res) => {
   try {
@@ -58,7 +57,7 @@ export const signup = async (req, res) => {
           errorCodes.push(ERROR_CODES.ACCOUNT_ALREADY_ACTIVE);
         }
       } else {
-        errorCodes.push(ERROR_CODES.INDEXNUM_NOT_FOUND);
+        errorCodes.push(ERROR_CODES.STAFFID_NOT_FOUND);
       }
     }
 
@@ -69,11 +68,20 @@ export const signup = async (req, res) => {
   }
 };
 
-
 export const signin = async (req, res) => {
+  let errorCodes = [];
   try {
-    //this is where the logic code will go
+    let queryRes = await getLecturerWithEmail(req.body.email);
+    if (
+      !(
+        queryRes.rows.length &&
+        (await compareHash(req.body.password, queryRes.rows[0].password))
+      )
+    )
+      errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!" });
   }
+
+  res.send(errorCodes);
 };
