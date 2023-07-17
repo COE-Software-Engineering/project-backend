@@ -24,7 +24,7 @@ CREATE TABLE Student(
 );
 
 -- copying data from classlist.csv into table
-\copy Student FROM 'C:\Users\Eli\Documents\KNUST\3rd_year\sem2\Software Engineering\Classroom_Assistant\Assets\classlist.csv' DELIMITER ',' CSV HEADER
+\copy Student FROM <abslolute_path_of 'classlist.csv'> DELIMITER ',' CSV HEADER
 
 
 -- adding password and active columns

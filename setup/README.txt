@@ -4,7 +4,8 @@
 * database would be setup
 
 NB: For the \copy ...... command in the 'Student table creation' section
-    replace the path given with the absolue path of the csv file in this folder ('classlist.csv')
+    replace the <abslolute_path_of 'classlist.csv'> with the absolute path
+    of the csv file in this folder ('classlist.csv')
 
 
 // For environment variables setup
