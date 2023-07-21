@@ -71,18 +71,20 @@ export const signup = async (req, res) => {
 // sign in handler
 export const signin = async (req, res) => {
   let errorCodes = [];
+  let userInfo = {};
   try {
     let queryRes = await getStudentWithEmail(req.body.email);
     if (
-      !(
-        queryRes.rows.length &&
-        (await compareHash(req.body.password, queryRes.rows[0].password))
-      )
-    )
+      queryRes.rows.length &&
+      (await compareHash(req.body.password, queryRes.rows[0].password))
+    ) {
+      userInfo = queryRes.rows[0];
+    } else {
       errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
+    }
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!" });
   }
 
-  res.send(errorCodes);
+  res.json({ errorCodes, userInfo });
 };

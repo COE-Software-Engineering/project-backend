@@ -8,6 +8,7 @@ import {
   activateAccount,
   getLecturerWithEmail,
   addAnnouncement,
+  changeAccountPassword,
 } from "../models/lecturerModel.js";
 import {
   generateRandomString,
@@ -19,9 +20,9 @@ import { sendPasswordOnSignup } from "../utilities/mail.js";
 
 // sign up handler
 export const signup = async (req, res) => {
+  let errorCodes = [];
   try {
     // check for csrf_token
-    let errorCodes = [];
     if (!FORM_CONSTANTS.STAFFID_REGEX.test(req.body.staff_id))
       errorCodes.push(ERROR_CODES.INVALID_STAFFID);
     if (!FORM_CONSTANTS.EMAIL_REGEX.test(req.body.email))
@@ -62,34 +63,36 @@ export const signup = async (req, res) => {
         errorCodes.push(ERROR_CODES.STAFFID_NOT_FOUND);
       }
     }
-
-    res.json(errorCodes);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Something went wrong!" });
-  }
-};
-
-export const signin = async (req, res) => {
-  let errorCodes = [];
-  try {
-    let queryRes = await getLecturerWithEmail(req.body.email);
-    if (
-      !(
-        queryRes.rows.length &&
-        (await compareHash(req.body.password, queryRes.rows[0].password))
-      )
-    )
-      errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
-  } catch (error) {
     res.status(500).json({ message: "Something went wrong!" });
   }
 
   res.json(errorCodes);
 };
 
+export const signin = async (req, res) => {
+  let errorCodes = [];
+  let userInfo = {};
+  try {
+    let queryRes = await getLecturerWithEmail(req.body.email);
+    if (
+      queryRes.rows.length &&
+      (await compareHash(req.body.password, queryRes.rows[0].password))
+    ) {
+      userInfo = queryRes.rows[0];
+    } else {
+      errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!" });
+  }
+
+  res.json({ errorCodes, userInfo });
+};
+
 /**
- * end point for resetting password
+ * end point for changing password
  */
 export const changePassword = async (req, res) => {
   let errorCodes = [];
@@ -101,29 +104,30 @@ export const changePassword = async (req, res) => {
     ) {
       if (!FORM_CONSTANTS.PASSWORD_REGEX.test(req.body.new_password))
         errorCodes.push(ERROR_CODES.INVALID_PASSWORD);
-      if (!(req.body.new_password !== req.body.new_password_confirm))
+      if (req.body.new_password !== req.body.new_password_confirm)
         errorCodes.push(ERROR_CODES.PASSWORD_MISMATCH);
 
-      if(errorCodes.length === 0){
+      if (errorCodes.length === 0) {
         let newHashedPassword = await hashText(
           req.body.new_password,
           CONFIG_CONSTANTS.HASH_SALTROUNDS
         );
 
         // change password
-        queryRes = await changePassword(req.body.staff_id);
-        if(!queryRes.rowCount){
+        if (
+          !(await changeAccountPassword(req.body.staff_id, newHashedPassword))
+        ) {
           errorCodes.push(ERROR_CODES.ERROR_CHANGING_PASS_IN_DB);
         }
       }
-
-      res.json(errorCodes);
     } else {
-      errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
+      errorCodes.push(ERROR_CODES.WRONG_PASSWORD);
     }
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!" });
   }
+
+  res.json(errorCodes);
 };
 
 /**
@@ -131,13 +135,17 @@ export const changePassword = async (req, res) => {
  */
 export const makeAnnouncement = async (req, res) => {
   let errorCodes = [];
-  let title = removeHTMLSpecialchars(req.body.title);
-  let content = removeHTMLSpecialchars(req.body.content);
-  let queryRes = await addAnnouncement(req.body.staff_id, title, content);
-  console.log(title, content);
-  console.log(queryRes);
-  if (!queryRes.rowCount) {
-    errorCodes.push(ERROR_CODES.ERROR_ADDING_ANNOUNCEMENT);
+  try {
+    let title = removeHTMLSpecialchars(req.body.title);
+    let content = removeHTMLSpecialchars(req.body.content);
+    let queryRes = await addAnnouncement(req.body.staff_id, title, content);
+    console.log(title, content);
+    console.log(queryRes);
+    if (!queryRes.rowCount) {
+      errorCodes.push(ERROR_CODES.ERROR_ADDING_ANNOUNCEMENT);
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!" });
   }
 
   res.json(errorCodes);

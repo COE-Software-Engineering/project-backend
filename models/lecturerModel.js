@@ -42,3 +42,15 @@ export async function addAnnouncement(id, title, content){
   let query = "INSERT INTO Announcement (poster_id, title, content) VALUES ($1, $2, $3)";
   return await db.query(query, [id, title, content]);
 }
+
+/**
+ * change password in database
+ * @param {int} id the id of the user
+ * @param {string} new_password the new password to use
+ * @return {boolean} true when password change was successful else false 
+ */
+export async function changeAccountPassword(staff_id, new_password){
+  let query = "UPDATE Lecturer SET password = $2 WHERE staff_id = $1";
+  let res = await db.query(query, [staff_id, new_password]);
+  return !!res.rowCount;
+}

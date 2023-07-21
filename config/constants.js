@@ -22,6 +22,7 @@ export const ERROR_CODES = {
   INVALID_STAFFID: [11, "Invalid staff id"],
   STAFFID_NOT_FOUND: [12, "Staff id not found"],
   ERROR_ADDING_ANNOUNCEMENT: [13, "Error adding announcement"],
+  WRONG_PASSWORD: [14, "Password is wrong"],
   
 
   ERROR_CHANGING_PASS_IN_DB: [14, "Error changing password in database"]
