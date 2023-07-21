@@ -35,6 +35,17 @@ port is "localhost://3000"
 
 <br>
 
+- **http://localhost:3001/lecturers/change_password** <br>
+  - Parameters:
+    - `staff_id` - Staff id of lecturer
+    - `current_password` - The current account password
+    - `new_password` - the new password to change to
+    - `new_password_confirm` - must match the `new_password`
+  - Returns:
+    - json containing `array` of `error codes`. In the event where all user inputs were valid and the user request was successful, an empty list is returned
+
+<br>
+
 - **http://localhost:3001/lecturers/make_announcements** <br>
   - Parameters:
     - `title` - the title of the announcement
@@ -63,5 +74,16 @@ port is "localhost://3000"
   - Returns:
     - json containing object with two properties `errorCodes`, the errors if any and `userInfo`, the information of the user.
       Note that the userInfo is empty if an error was encountered during sign up
+
+<br>
+
+- **http://localhost:3001/lecturers/change_password** <br>
+  - Parameters:
+    - `index_number` - Index number of student
+    - `current_password` - The current account password
+    - `new_password` - the new password to change to
+    - `new_password_confirm` - must match the `new_password`
+  - Returns:
+    - json containing `array` of `error codes`. In the event where all user inputs were valid and the user request was successful, an empty list is returned
 
 <br>

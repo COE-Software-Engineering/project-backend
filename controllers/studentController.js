@@ -7,6 +7,7 @@ import {
   getStudentWithIndex,
   activateAccount,
   getStudentWithEmail,
+  changeAccountPassword
 } from "../models/studentModel.js";
 import {
   generateRandomString,
@@ -87,4 +88,41 @@ export const signin = async (req, res) => {
   }
 
   res.json({ errorCodes, userInfo });
+};
+
+
+// change password handler
+export const changePassword = async (req, res) => {
+  let errorCodes = [];
+  try {
+    let queryRes = await getStudentWithIndex(req.body.index_number);
+    if (
+      queryRes.rows.length &&
+      (await compareHash(req.body.current_password, queryRes.rows[0].password))
+    ) {
+      if (!FORM_CONSTANTS.PASSWORD_REGEX.test(req.body.new_password))
+        errorCodes.push(ERROR_CODES.INVALID_PASSWORD);
+      if (req.body.new_password !== req.body.new_password_confirm)
+        errorCodes.push(ERROR_CODES.PASSWORD_MISMATCH);
+
+      if (errorCodes.length === 0) {
+        let newHashedPassword = await hashText(
+          req.body.new_password,
+          CONFIG_CONSTANTS.HASH_SALTROUNDS
+        );
+
+        if (
+          !(await changeAccountPassword(req.body.index_number, newHashedPassword))
+        ) {
+          errorCodes.push(ERROR_CODES.ERROR_CHANGING_PASS_IN_DB);
+        }
+      }
+    } else {
+      errorCodes.push(ERROR_CODES.WRONG_PASSWORD);
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!" });
+  }
+
+  res.json(errorCodes);
 };
