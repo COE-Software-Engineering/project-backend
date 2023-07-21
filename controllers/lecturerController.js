@@ -7,11 +7,13 @@ import {
   getLecturerWithStaffId,
   activateAccount,
   getLecturerWithEmail,
+  addAnnouncement,
 } from "../models/lecturerModel.js";
 import {
   generateRandomString,
   hashText,
   compareHash,
+  removeHTMLSpecialchars,
 } from "../utilities/utility_functions.js";
 import { sendPasswordOnSignup } from "../utilities/mail.js";
 
@@ -83,5 +85,60 @@ export const signin = async (req, res) => {
     res.status(500).json({ message: "Something went wrong!" });
   }
 
-  res.send(errorCodes);
+  res.json(errorCodes);
+};
+
+/**
+ * end point for resetting password
+ */
+export const changePassword = async (req, res) => {
+  let errorCodes = [];
+  try {
+    let queryRes = await getLecturerWithStaffId(req.body.staff_id);
+    if (
+      queryRes.rows.length &&
+      (await compareHash(req.body.current_password, queryRes.rows[0].password))
+    ) {
+      if (!FORM_CONSTANTS.PASSWORD_REGEX.test(req.body.new_password))
+        errorCodes.push(ERROR_CODES.INVALID_PASSWORD);
+      if (!(req.body.new_password !== req.body.new_password_confirm))
+        errorCodes.push(ERROR_CODES.PASSWORD_MISMATCH);
+
+      if(errorCodes.length === 0){
+        let newHashedPassword = await hashText(
+          req.body.new_password,
+          CONFIG_CONSTANTS.HASH_SALTROUNDS
+        );
+
+        // change password
+        queryRes = await changePassword(req.body.staff_id);
+        if(!queryRes.rowCount){
+          errorCodes.push(ERROR_CODES.ERROR_CHANGING_PASS_IN_DB);
+        }
+      }
+
+      res.json(errorCodes);
+    } else {
+      errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong!" });
+  }
+};
+
+/**
+ * end point for adding announcment to database
+ */
+export const makeAnnouncement = async (req, res) => {
+  let errorCodes = [];
+  let title = removeHTMLSpecialchars(req.body.title);
+  let content = removeHTMLSpecialchars(req.body.content);
+  let queryRes = await addAnnouncement(req.body.staff_id, title, content);
+  console.log(title, content);
+  console.log(queryRes);
+  if (!queryRes.rowCount) {
+    errorCodes.push(ERROR_CODES.ERROR_ADDING_ANNOUNCEMENT);
+  }
+
+  res.json(errorCodes);
 };

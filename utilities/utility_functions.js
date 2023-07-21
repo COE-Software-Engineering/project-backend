@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 
 /**
  * function to generate a random string of length n
+ * @param {int} n the length of the random string to generate
  */
 export function generateRandomString(n){
     let caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -20,8 +21,8 @@ export function generateRandomString(n){
 
 /**
  * function to encrypt password
- * @param password the text to be encrypted
- * @param saltRound integer that proportionally determines strenght of hashing
+ * @param {string} password the text to be encrypted
+ * @param {int} saltRound integer that proportionally determines strenght of hashing
  * @return encrypted text
  */
 
@@ -31,10 +32,21 @@ export async function hashText(text, saltRounds){
 
 /**
  * function compare string against hash
- * @param text the text to verify
- * @param encryptedText the hash to compare the text against
+ * @param {string} text  the text to verify
+ * @param {string} encryptedText  the hash to compare the text against
+ * @returns {string} the hashed form of given text
  */
 
 export async function compareHash(text, hashedText){
     return await bcrypt.compare(text, hashedText);
+}
+
+/**
+ * remove special characters from some text
+ * @param {string} text the text for which special characters are to be removed
+ * @returns {string} text with special characters removed
+ */
+export function removeHTMLSpecialchars(text){
+    const removeReg = /[<>/]/g
+    return text.replace(removeReg, " ");
 }

@@ -20,7 +20,11 @@ export const ERROR_CODES = {
   UNKNOWN_SIGNUP_ERROR: [9, "Uknown sign up error"],
   INVALID_SIGNIN_CREDENTIALS: [10, "Invalid sign in credentials"],
   INVALID_STAFFID: [11, "Invalid staff id"],
-  STAFFID_NOT_FOUND: [12, "Staff id not found"]
+  STAFFID_NOT_FOUND: [12, "Staff id not found"],
+  ERROR_ADDING_ANNOUNCEMENT: [13, "Error adding announcement"],
+  
+
+  ERROR_CHANGING_PASS_IN_DB: [14, "Error changing password in database"]
 };
 
 export const CONFIG_CONSTANTS = {

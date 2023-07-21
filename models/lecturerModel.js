@@ -31,3 +31,14 @@ export async function getLecturerWithEmail(email){
   let params = [email];
   return await db.query(query, params);
 }
+
+/**
+ * add annoucement made to database
+ * @param {string} title title of announcement
+ * @param {string} content content of announcement
+ * @returns {int} 1 on success
+ */
+export async function addAnnouncement(id, title, content){
+  let query = "INSERT INTO Announcement (poster_id, title, content) VALUES ($1, $2, $3)";
+  return await db.query(query, [id, title, content]);
+}

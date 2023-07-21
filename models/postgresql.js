@@ -18,6 +18,6 @@ export const query = async (text, params, callback) => {
   try {
     return await pool.query(text, params, callback);
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 };
