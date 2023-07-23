@@ -1,91 +1,155 @@
---------------------------------------------------------------------------------------------------------------
--- Database Creation START
---------------------------------------------------------------------------------------------------------------
 DROP DATABASE IF EXISTS classroom_assistant;
+
 CREATE DATABASE classroom_assistant;
 
 \c classroom_assistant
---------------------------------------------------------------------------------------------------------------
--- Database Creation END
---------------------------------------------------------------------------------------------------------------
+
+BEGIN;
 
 
-
-
---------------------------------------------------------------------------------------------------------------
--- Student Table Creation START
---------------------------------------------------------------------------------------------------------------
-DROP TABLE IF EXISTS Student;
-CREATE TABLE Student(
-	Reference_Number VARCHAR(15) PRIMARY KEY,
-	Index_Number VARCHAR(15),
-	Surname VARCHAR(50),
-	Othername VARCHAR(50)
+CREATE TABLE IF NOT EXISTS public.announcement
+(
+    id bigserial NOT NULL,
+    time_stamp timestamp without time zone default now(),
+    category text COLLATE pg_catalog."default",
+    title character varying,
+    content text COLLATE pg_catalog."default",
+    poster_id integer,
+    CONSTRAINT announcement_pkey PRIMARY KEY (id)
 );
 
--- copying data from classlist.csv into table
-\copy Student FROM <abslolute_path_of 'classlist.csv'> DELIMITER ',' CSV HEADER
-
-
--- adding password and active columns
-ALTER TABLE Student
-ADD Email VARCHAR,
-ADD Password VARCHAR,
-ADD Active CHAR DEFAULT 0;
---------------------------------------------------------------------------------------------------------------
--- Student Table Creation END
---------------------------------------------------------------------------------------------------------------
-
-
-
-
---------------------------------------------------------------------------------------------------------------
--- Lecturer Table Creation START
---------------------------------------------------------------------------------------------------------------
-CREATE TABLE public.lecturer
+CREATE TABLE IF NOT EXISTS public.course
 (
-    staff_id integer,
-    first_name text NOT NULL,
-    last_name text NOT NULL,
-    course text,
-    email text,
+    course_code character varying COLLATE pg_catalog."default" NOT NULL,
+    title text COLLATE pg_catalog."default",
+    lecturer_id integer,
+    credit_hour integer,
+    reference_link text COLLATE pg_catalog."default",
+    CONSTRAINT course_pkey PRIMARY KEY (course_code)
+);
+
+CREATE TABLE IF NOT EXISTS public.lecturer
+(
+    staff_id integer NOT NULL,
+    last_name text COLLATE pg_catalog."default" NOT NULL,
+    other_names text COLLATE pg_catalog."default" NOT NULL,
+    email text COLLATE pg_catalog."default",
     office_number integer,
-    gender text,
-    poster_id integer,
-    password VARCHAR,
-    active CHAR DEFAULT 0,
+    gender text COLLATE pg_catalog."default",
+    password character varying(500) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    active char default '0',
     CONSTRAINT staff_id_sequence PRIMARY KEY (staff_id)
 );
 
-ALTER TABLE IF EXISTS public.lecturer
-    OWNER to postgres;
-INSERT INTO public.lecturer(
-	staff_id, first_name, last_name, course, email_address, office_number, gender, poster_id)
-	VALUES 
-('10293347', 'Emmanuel', 'Keelson', 'Operating systems', 'keelson@gmail.com', '109', 'male',4001),
-('10293809', 'Theresa', 'Kumson', 'Software Engineering', 'kumawood@gmail.com', '100', 'female',4201),
-('10200840', 'Esinam', 'Ebbah', 'Database and infomation retrieval', 'ebbah56@gmail.com', '1046', 'male',4031),
-('10433847', 'Peace', 'Donkor', 'Digital systems', 'peacedonkor@gmail.com', '164', 'male',4011),
-('10293988', 'Yussif', 'Domennyo', 'Autronic lab','ydomennyo8@gmail.com', '199', 'male',4701),
-('10290917', 'Patrick', 'Kommey', 'Embedded systems', 'themanhimself@gmail.com', '111', 'male',4909);
-
---------------------------------------------------------------------------------------------------------------
--- Lecturer Table Creation END
---------------------------------------------------------------------------------------------------------------
-
-
-
---------------------------------------------------------------------------------------------------------------
--- Announcement Table Creation START
---------------------------------------------------------------------------------------------------------------
-CREATE TABLE Announcement (
-	id BIGSERIAL PRIMARY KEY,
-	title VARCHAR,
-	content TEXT,
-	poster_id INT,
-	FOREIGN KEY (poster_id) REFERENCES Lecturer(staff_id)
+CREATE TABLE IF NOT EXISTS public.student
+(
+    index_number integer NOT NULL,
+    last_name text COLLATE pg_catalog."default",
+    other_names text COLLATE pg_catalog."default",
+    email character varying COLLATE pg_catalog."default",
+    password character varying COLLATE pg_catalog."default",
+    active char default '0',
+    reference_number integer,
+    gender varchar(10),
+    is_course_rep "char" default '0',
+    CONSTRAINT student_pkey PRIMARY KEY (index_number)
 );
---------------------------------------------------------------------------------------------------------------
--- Announcement Table Creation END
---------------------------------------------------------------------------------------------------------------
 
+CREATE TABLE IF NOT EXISTS public.student_course
+(
+    student_index_number integer NOT NULL,
+    course_course_code character varying COLLATE pg_catalog."default" NOT NULL
+);
+
+ALTER TABLE IF EXISTS public.announcement
+    ADD CONSTRAINT poster_id FOREIGN KEY (poster_id)
+    REFERENCES public.lecturer (staff_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+CREATE INDEX IF NOT EXISTS announcement_pkey
+    ON public.announcement(id);
+
+
+ALTER TABLE IF EXISTS public.course
+    ADD CONSTRAINT lecturer_id FOREIGN KEY (lecturer_id)
+    REFERENCES public.lecturer (staff_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.student_course
+    ADD FOREIGN KEY (student_index_number)
+    REFERENCES public.student (index_number) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.student_course
+    ADD FOREIGN KEY (course_course_code)
+    REFERENCES public.course (course_code) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+----------------------------- MAKING INSERTIONS --------------------------------------
+
+
+--------------------------------------------------------------------------------------
+--------------------------- Lecturer Insertions START --------------------------------
+--------------------------------------------------------------------------------------
+
+INSERT INTO public.lecturer(
+	staff_id, last_name, other_names, email, office_number, gender)
+	VALUES 
+('10293347', 'Keelson', 'Emmanuel', 'keelson@gmail.com', '109', 'male'),
+('10293809', 'Kumson', 'Theresa', 'kumawood@gmail.com', '100', 'female'),
+('10200840', 'Ebbah', 'Esinam', 'ebbah56@gmail.com', '1046', 'male'),
+('10433847', 'Donkor', 'Peace', 'peacedonkor@gmail.com', '164', 'male'),
+('10293988', 'Domennyo', 'Yussif','ydomennyo8@gmail.com', '199', 'male'),
+('10290917', 'Kommey', 'Patrick', 'themanhimself@gmail.com', '111', 'male');
+
+--------------------------------------------------------------------------------------
+--------------------------- Lecturer Insertions END ----------------------------------
+--------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------
+--------------------------- Student Insertions START ---------------------------------
+--------------------------------------------------------------------------------------
+
+\copy Student(reference_number, index_number, last_name, other_names) FROM '<absolute path of classlist.csv>' DELIMITER ',' CSV HEADER
+
+--------------------------------------------------------------------------------------
+--------------------------- Student Insertions END -----------------------------------
+--------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------
+--------------------------- Course Insertions START ----------------------------------
+--------------------------------------------------------------------------------------
+INSERT INTO course(
+	course_code,
+	title,
+	lecturer_id,
+	credit_hour,
+    reference_link)
+VALUES
+('COE 368', 'Database and information retrieval', '10200840','3','google.com'),
+('COE 392', 'Autotronic lab', '10293988', '2','google.com'),
+('COE 354', 'Operating systems', '10293347', '4','google.com'),
+('COE 382', 'Digital systems', '10433847', '3',''),
+('COE 358', 'Embedded systms', '10290917','3','google.com'),
+('COE 356', 'Sooftware engineering', '10293809','3','google.com');
+
+--------------------------------------------------------------------------------------
+--------------------------- Course Insertions END ------------------------------------
+--------------------------------------------------------------------------------------
+
+
+END;

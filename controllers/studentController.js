@@ -7,7 +7,7 @@ import {
   getStudentWithIndex,
   activateAccount,
   getStudentWithEmail,
-  changeAccountPassword
+  changeAccountPassword,
 } from "../models/studentModel.js";
 import {
   generateRandomString,
@@ -83,13 +83,12 @@ export const signin = async (req, res) => {
     } else {
       errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
     }
+    res.json({ errorCodes, userInfo });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong!" });
   }
-
-  res.json({ errorCodes, userInfo });
 };
-
 
 // change password handler
 export const changePassword = async (req, res) => {
@@ -112,7 +111,10 @@ export const changePassword = async (req, res) => {
         );
 
         if (
-          !(await changeAccountPassword(req.body.index_number, newHashedPassword))
+          !(await changeAccountPassword(
+            req.body.index_number,
+            newHashedPassword
+          ))
         ) {
           errorCodes.push(ERROR_CODES.ERROR_CHANGING_PASS_IN_DB);
         }
@@ -120,9 +122,9 @@ export const changePassword = async (req, res) => {
     } else {
       errorCodes.push(ERROR_CODES.WRONG_PASSWORD);
     }
+    res.json(errorCodes);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong!" });
   }
-
-  res.json(errorCodes);
 };

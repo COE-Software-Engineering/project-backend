@@ -13,7 +13,7 @@ export function generateRandomString(n){
     let randString = "";
 
     for(let i = 0; i < n; i++){
-        randString += full[Math.round(Math.random() * full.length)];
+        randString += full[Math.floor(Math.random() * full.length)];
     }
 
     return randString;

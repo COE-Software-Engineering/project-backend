@@ -4,7 +4,7 @@ export const FORM_CONSTANTS = {
   PASSWORD_REGEX:
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[/*.~!@#$%^&*()_+?|\\]).{8,50}$/,
   INDEXNUM_REGEX: /^[0-9]{7}/,
-  STAFFID_REGEX: /^[0-9]{8}/
+  STAFFID_REGEX: /^[0-9]{8}/,
 };
 
 export const ERROR_CODES = {
@@ -12,7 +12,10 @@ export const ERROR_CODES = {
   INVALID_LASTNAME: [1, "Invalid Last ame"],
   INVALID_FULLNAME: [2, "Invalid full name"],
   INVALID_EMAIL: [3, "Invalid email address"],
-  INVALID_PASSWORD: [4, "Invalid password"],
+  INVALID_PASSWORD: [
+    4,
+    "Password must be at least 8 characters long, must contain at least one of an uppercase letter, a lowercase letter, a digit and a special character (/*.~!@#$%^&*()_+?|)",
+  ],
   PASSWORD_MISMATCH: [5, "Password mismatch"],
   INVALID_INDEXNUM: [6, "Invalid index number"],
   INDEXNUM_NOT_FOUND: [7, "Index number not found"],
@@ -23,12 +26,11 @@ export const ERROR_CODES = {
   STAFFID_NOT_FOUND: [12, "Staff id not found"],
   ERROR_ADDING_ANNOUNCEMENT: [13, "Error adding announcement"],
   WRONG_PASSWORD: [14, "Password is wrong"],
-  
 
-  ERROR_CHANGING_PASS_IN_DB: [14, "Error changing password in database"]
+  ERROR_CHANGING_PASS_IN_DB: [14, "Error changing password in database"],
 };
 
 export const CONFIG_CONSTANTS = {
   TEMP_PASSWORD_LENGTH: 10,
-  HASH_SALTROUNDS : 10
-}
+  HASH_SALTROUNDS: 10,
+};

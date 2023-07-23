@@ -63,12 +63,11 @@ export const signup = async (req, res) => {
         errorCodes.push(ERROR_CODES.STAFFID_NOT_FOUND);
       }
     }
+    res.json(errorCodes);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Something went wrong!" });
   }
-
-  res.json(errorCodes);
 };
 
 export const signin = async (req, res) => {
@@ -84,11 +83,11 @@ export const signin = async (req, res) => {
     } else {
       errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
     }
+    res.json({ errorCodes, userInfo });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong!" });
   }
-
-  res.json({ errorCodes, userInfo });
 };
 
 /**
@@ -123,11 +122,11 @@ export const changePassword = async (req, res) => {
     } else {
       errorCodes.push(ERROR_CODES.WRONG_PASSWORD);
     }
+    res.json(errorCodes);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong!" });
   }
-
-  res.json(errorCodes);
 };
 
 /**
@@ -139,14 +138,13 @@ export const makeAnnouncement = async (req, res) => {
     let title = removeHTMLSpecialchars(req.body.title);
     let content = removeHTMLSpecialchars(req.body.content);
     let queryRes = await addAnnouncement(req.body.staff_id, title, content);
-    console.log(title, content);
-    console.log(queryRes);
     if (!queryRes.rowCount) {
       errorCodes.push(ERROR_CODES.ERROR_ADDING_ANNOUNCEMENT);
     }
+
+    res.json(errorCodes);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong!" });
   }
-
-  res.json(errorCodes);
 };

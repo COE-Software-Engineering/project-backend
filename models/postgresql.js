@@ -15,9 +15,5 @@ const pool = new Pool({
 
 // export default pool;
 export const query = async (text, params, callback) => {
-  try {
-    return await pool.query(text, params, callback);
-  } catch (err) {
-    throw err;
-  }
+  return await pool.query(text, params, callback);
 };
