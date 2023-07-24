@@ -50,7 +50,7 @@ port is "localhost://3000"
   - Parameters:
     - `title` - the title of the announcement
     - `content` - the content of the announcement
-    - `id` - the id of the lecturer posting the announcement
+    - `id` - the id of the user posting the announcement (`staff_id` for lecturers, `index_number` for class reps)
   - Returns:
     - json containing `array` of `error codes`. In the event where all user inputs were valid and the user request was successful, an empty list is returned
 
