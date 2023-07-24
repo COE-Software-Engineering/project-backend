@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from 'dotenv';
 import studentRoutes from './routes/studentRoutes.js';
 import lecturerRoutes from './routes/lecturerRoutes.js';
+import apiRoutes from "./routes/apiRoutes.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors());
 
 app.use("/students", studentRoutes);
 app.use("/lecturers", lecturerRoutes);
+app.use("/api", apiRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send("WELCOME TO THE VIRTUAL CLASSROOM BACKEND!");
