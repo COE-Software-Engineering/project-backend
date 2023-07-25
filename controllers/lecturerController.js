@@ -35,7 +35,6 @@ export const signup = async (req, res) => {
           let tempPass = generateRandomString(
             CONFIG_CONSTANTS.TEMP_PASSWORD_LENGTH
           );
-          console.log(tempPass);
           // sending the password to the user
           let passSendRes = await sendPasswordOnSignup(
             req.body.email,
