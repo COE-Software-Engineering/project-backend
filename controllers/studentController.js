@@ -80,6 +80,7 @@ export const signin = async (req, res) => {
       (await compareHash(req.body.password, queryRes.rows[0].password))
     ) {
       userInfo = queryRes.rows[0];
+      delete userInfo.password;
     } else {
       errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
     }
