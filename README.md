@@ -16,7 +16,7 @@ port is "localhost://3000"
 
 #### <ins>Lecturer endpoints</ins>
 
-- **[POST] : http://localhost:3001/lecturers/signup** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/lecturers/signup<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/lecturers/signup**
   - Parameters:
     - `staff_id` - The staff id of the lecturer
     - `email` - The email address of lecturer
@@ -25,7 +25,7 @@ port is "localhost://3000"
 
 <br>
 
-- **[POST] : http://localhost:3001/lecturers/signin** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/lecturers/signin<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/lecturers/signin**
   - Parameters:
     - `email` - The email address of the lecturer
     - `password` - The password of the lecturer
@@ -35,7 +35,7 @@ port is "localhost://3000"
 
 <br>
 
-- **[POST] : http://localhost:3001/lecturers/change_password** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/lecturers/change_password<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/lecturers/change_password**
   - Parameters:
     - `staff_id` - Staff id of lecturer
     - `current_password` - The current account password
@@ -46,7 +46,7 @@ port is "localhost://3000"
 
 <br>
 
-- **[POST] : http://localhost:3001/lecturers/make_announcements** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/lecturers/make_announcements<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/lecturers/make_announcement**
   - Parameters:
     - `title` - the title of the announcement
     - `content` - the content of the announcement
@@ -58,7 +58,7 @@ port is "localhost://3000"
 
 #### <ins>Student endpoints</ins>
 
-- **[POST] : http://localhost:3001/students/signup** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/students/signup<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/students/signup**
   - Parameters:
     - `index_number` - The index number of the student
     - `email` - Email address of student
@@ -67,7 +67,7 @@ port is "localhost://3000"
 
 <br>
 
-- **[POST] : http://localhost:3001/students/sign** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/students/signin<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/students/signin**
   - Parameters:
     - `email` - Email address of student
     - `password` - Password of student
@@ -77,7 +77,7 @@ port is "localhost://3000"
 
 <br>
 
-- **[POST] : http://localhost:3001/lecturers/change_password** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/students/change_password<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/students/change_password**
   - Parameters:
     - `index_number` - Index number of student
     - `current_password` - The current account password
@@ -92,7 +92,7 @@ port is "localhost://3000"
 
 #### <ins>API endpoints</ins>
 
-- **[POST] : http://localhost:3001/api/get_all_announcements** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/api/get_all_announcements<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/api/get_all_announcements**
   - Parameters: `None`
   - Returns:
     - JSON which is an array of objects of all announcement currently in the database sorted by their `time_stamp`.
@@ -104,7 +104,7 @@ port is "localhost://3000"
 
 <br>
 
-- **[POST] : http://localhost:3001/api/get_all_courses** <br>
+- **[POST]<br>[local endpoint]:http://localhost:3001/api/get_all_courses<br>[remote endpoint]:https://classroom-assistant-backend.onrender.com/api/get_all_courses**
   - Parameters: `None`
   - Returns:
     - JSON which is an array of objects of all courses currently in the database.
