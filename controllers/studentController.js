@@ -74,7 +74,7 @@ export const signin = async (req, res) => {
   let userInfo = {};
   try {
     let queryRes = await getStudentWithEmail(req.body.email);
-    if (queryRes.length && queryRes.rows[0].active === "1") {
+    if (queryRes.rows.length && queryRes.rows[0].active === "1") {
       if (
         queryRes.rows.length &&
         (await compareHash(req.body.password, queryRes.rows[0].password))
