@@ -35,7 +35,7 @@ async function sendMail(emailAddress, subject, message, messageHTML) {
 export async function sendPasswordOnSignup(emailAddress, password) {
   let message = `Your new Password is ${password}, you are advised to change it as soon as possible to something more convenient but secure`;
   let messageHTML = `
-  Your new password: <strong>${password}</strong>. <br>
+  Your new password: <strong>${password}</strong> <br>
   <span color='red'>You are advised to change it as soon as possible to something more convenient but secure</span>
   `;
   return await sendMail(emailAddress, "Welcome, Here's your new password", message, messageHTML);
