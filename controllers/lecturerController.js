@@ -74,14 +74,15 @@ export const signin = async (req, res) => {
   let userInfo = {};
   try {
     let queryRes = await getLecturerWithEmail(req.body.email);
-    if (
-      queryRes.rows.length &&
-      (await compareHash(req.body.password, queryRes.rows[0].password))
-    ) {
-      userInfo = queryRes.rows[0];
-      delete userInfo.password;
+    if (queryRes.rows.length && queryRes.rows[0].active === "1") {
+      if (await compareHash(req.body.password, queryRes.rows[0].password)) {
+        userInfo = queryRes.rows[0];
+        delete userInfo.password;
+      } else {
+        errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
+      }
     } else {
-      errorCodes.push(ERROR_CODES.INVALID_SIGNIN_CREDENTIALS);
+      errorCodes.push(ERROR_CODES.ACCOUNT_NOT_ACTIVE);
     }
     res.json({ errorCodes, userInfo });
   } catch (error) {
