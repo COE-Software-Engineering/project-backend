@@ -26,6 +26,7 @@ export const ERROR_CODES = {
   STAFFID_NOT_FOUND: [12, "Staff id not found"],
   ERROR_ADDING_ANNOUNCEMENT: [13, "Error adding announcement"],
   WRONG_PASSWORD: [14, "Password is wrong"],
+  ACCOUNT_NOT_ACTIVE: [15, "Account not active"],
 
   ERROR_CHANGING_PASS_IN_DB: [14, "Error changing password in database"],
 };
